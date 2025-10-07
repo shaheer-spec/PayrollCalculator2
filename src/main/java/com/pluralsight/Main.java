@@ -13,15 +13,14 @@ public class Main {
         System.out.print("Enter the name of the employee file to process: ");
         String fileName = scanner.nextLine();
 
+        System.out.print("Enter the name of the payroll file to create:");
+        String payrollFile = scanner.nextLine();
+
         try {
             BufferedReader reader = new BufferedReader(new FileReader(fileName));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(payrollFile));
 
             String line;
-
-            System.out.print("Enter the name of the payroll file to create:");
-            String payrollFile = scanner.nextLine();
-
-            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(payrollFile));
 
             while ((line = reader.readLine()) != null) {
                 String[] tokens = line.split("\\|");
@@ -32,12 +31,14 @@ public class Main {
 
                 Employee employee = new Employee(id, name, hoursWorked, payRate);
 
-                System.out.printf("%d | %s | $%.2f%n",
+                String outputLine = String.format("%d | %s | %.2f%n",
                         employee.getEmployeeId(), employee.getName(), employee.getGrossPay());
+
+                writer.write(outputLine);
             }
 
             reader.close();
-            bufferedWriter.close();
+            writer.close();
         } catch (Exception ex) {
             System.err.println("Error reading file: " + fileName);
         }
